@@ -65,7 +65,7 @@ const Homepage = () => {
       <form onSubmit={handleSearch} style={{ marginBottom: "20px", textAlign: "center" }}>
         <input
           type="text"
-          placeholder="Search patterns like 'yellow' or 'sweater'"
+          placeholder="Search patterns"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           style={{ padding: "10px", width: "70%" }}
@@ -120,7 +120,13 @@ const Homepage = () => {
                 <h3 style={{ color: "#6b4a30" }}>{knit.name}</h3>
                 <p>
                   <strong>Price:</strong>{" "}
-                  {knit.price ? `$${knit.price.toFixed(2)}` : "Free"}
+                  {(() => {
+                    const sourceWithPrice = knit?.pattern_sources?.find((s) => s?.price != null);
+                    if (sourceWithPrice?.price != null) {
+                      return `$${parseFloat(sourceWithPrice.price).toFixed(2)}`;
+                    }
+                    return knit?.free ? "Free" : "Paid";
+                  })()}
                 </p>
                 <Link to={`/knits/${knit.id || index}`}>View Details</Link>
               </div>
