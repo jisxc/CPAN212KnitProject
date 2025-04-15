@@ -24,8 +24,8 @@ const Navigation = () => {
           <Link to="/items">Items</Link>
           <Link to="/sales">Sales</Link>
           <Link to="/wishlist">Wishlist</Link>
-          <Link to="/about">About Us</Link>
-          <Link to="/contact">Contact Us</Link>
+          <Link to="/aboutus">About Us</Link> 
+          <Link to="/contactus">Contact Us</Link> 
         </div>
 
         <div className="nav-auth">

@@ -1,6 +1,6 @@
 import React from "react";
 
-const Checkout = () => {
+const Discovery = () => {
   return (
     <div>
       <h2>Cart Page</h2>
@@ -9,4 +9,4 @@ const Checkout = () => {
   );
 };
 
-export default Checkout; // Make sure this line exists
+export default Discovery; // Make sure this line exists
