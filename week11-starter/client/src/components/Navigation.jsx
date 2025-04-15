@@ -4,15 +4,14 @@ import { Link, useNavigate } from "react-router-dom";
 const Navigation = () => {
   const navigate = useNavigate();
 
-  // Get the user email from localStorage (used for logged-in user identification)
   const email = localStorage.getItem("email"); 
-
-  const isAuthenticated = email; // If email exists, user is logged in
+  const isAuthenticated = email;
+  const username = email ? email.split('@')[0] : '';
 
   const handleLogout = () => {
-    localStorage.removeItem("email"); // Remove email (and password, if needed)
-    localStorage.removeItem("password"); // You can remove password if you're using it
-    navigate("/login"); // Redirect to login page after logging out
+    localStorage.removeItem("email");
+    localStorage.removeItem("password"); 
+    navigate("/login"); 
   };
 
   return (
@@ -21,8 +20,15 @@ const Navigation = () => {
       <nav className="nav-container">
         <div className="nav-center">
           <Link to="/">Home</Link>
-          <Link to="/knits">All Knits</Link>
-          <Link to="/knits/add">Add Knit</Link>
+          <Link to="/discovery">Discovery Page</Link>
+          <Link to="/item-summary">Item Summary</Link>
+          <Link to="/sale">Sale Section</Link>
+          <Link to="/wishlist">Wishlist</Link>
+          <Link to="/about">About Us</Link>
+          <Link to="/contact">Contact Us</Link>
+          
+          <Link to="/cart">Cart</Link>
+          <Link to="/checkout">Checkout</Link>
         </div>
 
         <div className="nav-auth">
