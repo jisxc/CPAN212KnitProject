@@ -1,4 +1,4 @@
-const User = require('../models/user');
+const User = require('../models/user'); 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -26,7 +26,7 @@ const registerUser = async (req, res) => {
 
     await newUser.save();
 
-    console.log("User registered successfully:", newUser);
+    console.log("User registered successfully:", newUser); 
     res.status(201).json({
       message: 'User registered successfully',
     });
@@ -38,30 +38,27 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password } = req.body;  
 
-    // Check if the user exists by username
     const user = await User.findOne({ username });
     if (!user) {
       return res.status(400).json({ error: 'User not found' });
     }
 
-    // Compare the provided password with the hashed password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(400).json({ error: 'Invalid password' });
     }
 
-    // Generate a JWT token with user data and secret
     const token = jwt.sign(
-      { userId: user._id, username: user.username },
-      JWT_SECRET,
-      { expiresIn: '1h' }
+      { userId: user._id, username: user.username }, 
+      JWT_SECRET,  
+      { expiresIn: '1h' } 
     );
 
     res.status(200).json({
       message: 'Login successful',
-      token, // Send the token to the client
+      token, 
     });
   } catch (error) {
     console.error('Login error:', error);

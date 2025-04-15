@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -12,22 +12,22 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/users/login`,  // Using environment variable for the API URL
-        { username, password }
-      );
+      const response = await axios.post("http://localhost:8000/api/users/login", {
+        email,
+        password,
+      });
 
-      localStorage.setItem('authToken', response.data.token);
-      localStorage.setItem('username', username);
+      localStorage.setItem("authToken", response.data.token);
+      localStorage.setItem("email", email);
 
-      navigate('/');
+      navigate("/");
     } catch (err) {
       if (!err.response) {
-        setError('Network error. Please try again.');
+        setError("Network error. Please try again.");
       } else {
-        setError(err.response.data?.error || 'Login failed');
+        setError(err.response.data?.error || "Login failed");
       }
     } finally {
       setLoading(false);
@@ -40,12 +40,12 @@ const Login = () => {
       {error && <p style={styles.error}>{error}</p>}
       <form onSubmit={handleSubmit} style={styles.form}>
         <div style={styles.inputContainer}>
-          <label htmlFor="username" style={styles.label}>Username</label>
+          <label htmlFor="email" style={styles.label}>Email</label>
           <input
-            id="username"
-            type="text"  // Changed to text instead of username
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             style={styles.input}
             required
           />

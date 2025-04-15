@@ -7,7 +7,7 @@ const Register = () => {
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
-    username: '',
+    email: '',
     password: '',
   });
   const [loading, setLoading] = useState(false);
@@ -72,10 +72,10 @@ const Register = () => {
           style={styles.input}
         />
         <input
-          type="text"  // Change from "username" to "text"
-          name="username"
-          placeholder="Username"
-          value={formData.username}
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
           onChange={handleChange}
           required
           style={styles.input}
