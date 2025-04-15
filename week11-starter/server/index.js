@@ -1,20 +1,22 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 require('dotenv').config();
 const basicAuth = require('express-basic-auth');
+
 const app = express();
+const knitsRoutes = require('./routes/knit_router');
 
-// Set up middleware
-app.use(express.json()); // Middleware to parse JSON bodies
+app.use(cors());
 
-// Basic Auth setup
-app.use(basicAuth({
-  users: { 
-    [process.env.VITE_RAVELRY_USERNAME]: process.env.VITE_RAVELRY_PASSWORD // Use environment variables for security
+app.use(express.json());
+app.use('/api/knits', basicAuth ({
+  users: {
+    [process.env.RAVELRY_USERNAME]: process.env.RAVELRY_PASSWORD
   },
   challenge: true,
   unauthorizedResponse: 'Unauthorized'
-}));
+}), knitsRoutes);
 
 // Test route to check server health
 app.get('/', (req, res) => {
@@ -23,7 +25,7 @@ app.get('/', (req, res) => {
 });
 
 // MongoDB connection setup
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log("MongoDB connected successfully.");
     app.listen(process.env.PORT || 8000, () => {

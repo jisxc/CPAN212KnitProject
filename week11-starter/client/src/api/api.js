@@ -2,6 +2,13 @@ import axios from 'axios';
 
 // Load base API URL from environment variables
 const API_URL = import.meta.env.VITE_API_URL;
+const response = await fetch(`${import.meta.env.API_URL}/api/knits`, {
+  headers: {
+    Authorization: 'Basic' + btoa(
+      import.meta.env.VITE_RAVELRY_USERNAME + ":" + import.meta.env.VITE_RAVELRY_PASSWORD
+    )
+  }
+});
 
 // Basic Auth header generator for Ravelry or backend if needed
 const getBasicAuthHeader = () => {

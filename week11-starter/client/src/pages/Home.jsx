@@ -24,7 +24,21 @@ const Homepage = () => {
         }
 
         const data = await response.json();
-        setKnits(data.slice(0, 5)); // Only show the first 5 knits
+
+        console.log("Fetched Knits Data: ", data);
+
+        const filteredKnits = Object.values(data).filter((pattern) => {
+          const firstPhoto = pattern?.photos?.[0];
+
+          console.log("Pattern Name: ", pattern?.name);
+          console.log("Photo Object: ", firstPhoto);
+
+          // Only require name and *some photo*, ignore price for now
+          return pattern?.name && firstPhoto;
+        });
+
+        setKnits(filteredKnits.slice(0, 5)); // Only show the first 5 knits
+        console.log("Filtered Knits: ", filteredKnits);
       } catch (err) {
         console.error("Error fetching knits:", err);
         setError("Failed to fetch knits. Please try again later.");
@@ -47,15 +61,27 @@ const Homepage = () => {
       ) : (
         <div style={styles.knitList}>
           {knits.length > 0 ? (
-            knits.map((knit) => (
-              <div key={knit._id} style={styles.knitCard}>
-                {knit.image && <img src={knit.image} alt={knit.title} style={styles.image} />}
-                <h3 style={styles.knitTitle}>{knit.title}</h3>
-                <p><strong>Knit by:</strong> {knit.author}</p>
-                <p><strong>Price:</strong> ${knit.price.toFixed(2)}</p>
-                <Link to={`/knits/${knit._id}`} style={styles.detailsLink}>View Details</Link>
-              </div>
-            ))
+            knits.map((knit, index) => {
+              const photo = knit?.photos?.[0];
+              const imageUrl = photo?.medium_url || photo?.small_url || photo?.square_url;
+
+              return (
+                <div key={index} style={styles.knitCard}>
+                  <img
+                    src={imageUrl || "https://via.placeholder.com/250x200?text=No+Image"}
+                    alt={knit.name}
+                    style={styles.image}
+                  />
+                  <h3 style={styles.knitTitle}>{knit.name}</h3>
+                  <p>
+                    <strong>Price:</strong> {knit.price ? `$${knit.price.toFixed(2)}` : "Free"}
+                  </p>
+                  <Link to={`/knits/${knit.id || index}`} style={styles.detailsLink}>
+                    View Details
+                  </Link>
+                </div>
+              );
+            })
           ) : (
             <p>No knits available at the moment.</p>
           )}
@@ -119,3 +145,4 @@ const styles = {
 };
 
 export default Homepage;
+
