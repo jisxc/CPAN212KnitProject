@@ -63,20 +63,28 @@ const Homepage = () => {
           {knits.length > 0 ? (
             knits.map((knit, index) => {
               const photo = knit?.photos?.[0];
-              const imageUrl = photo?.medium_url || photo?.small_url || photo?.square_url;
+              const imageUrl =
+                photo?.medium_url || photo?.small_url || photo?.square_url;
 
               return (
                 <div key={index} style={styles.knitCard}>
                   <img
-                    src={imageUrl || "https://via.placeholder.com/250x200?text=No+Image"}
+                    src={
+                      imageUrl ||
+                      "https://via.placeholder.com/250x200?text=No+Image"
+                    }
                     alt={knit.name}
                     style={styles.image}
                   />
                   <h3 style={styles.knitTitle}>{knit.name}</h3>
                   <p>
-                    <strong>Price:</strong> {knit.price ? `$${knit.price.toFixed(2)}` : "Free"}
+                    <strong>Price:</strong>{" "}
+                    {knit.price ? `$${knit.price.toFixed(2)}` : "Free"}
                   </p>
-                  <Link to={`/knits/${knit.id || index}`} style={styles.detailsLink}>
+                  <Link
+                    to={`/knits/${knit.id || index}`}
+                    style={styles.detailsLink}
+                  >
                     View Details
                   </Link>
                 </div>
@@ -140,9 +148,10 @@ const styles = {
   error: {
     color: "red",
     fontWeight: "bold",
-    textAlign: "center",
+    textAlign: "center", 
   },
 };
+
 
 export default Homepage;
 

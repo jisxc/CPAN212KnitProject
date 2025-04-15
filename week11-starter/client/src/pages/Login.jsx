@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../api/api';  
+import axios from 'axios';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -14,8 +14,14 @@ const Login = () => {
     setLoading(true);
     setError('');
     try {
-      const { data } = await login({ email, password });
-      localStorage.setItem('authToken', data.token);  // Store the JWT in localStorage
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/users/login`,  // Using environment variable for the API URL
+        { username, password }
+      );
+
+      localStorage.setItem('authToken', response.data.token);
+      localStorage.setItem('username', username);
+
       navigate('/');
     } catch (err) {
       if (!err.response) {
@@ -34,12 +40,12 @@ const Login = () => {
       {error && <p style={styles.error}>{error}</p>}
       <form onSubmit={handleSubmit} style={styles.form}>
         <div style={styles.inputContainer}>
-          <label htmlFor="email" style={styles.label}>Email</label>
+          <label htmlFor="username" style={styles.label}>Username</label>
           <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            id="username"
+            type="text"  // Changed to text instead of username
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             style={styles.input}
             required
           />

@@ -2,21 +2,18 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
-const basicAuth = require('express-basic-auth');
 
 const app = express();
+const PORT = process.env.PORT || 8000;
+
+const userRoutes = require('./routes/user_router');
 const knitsRoutes = require('./routes/knit_router');
 
 app.use(cors());
-
 app.use(express.json());
-app.use('/api/knits', basicAuth ({
-  users: {
-    [process.env.RAVELRY_USERNAME]: process.env.RAVELRY_PASSWORD
-  },
-  challenge: true,
-  unauthorizedResponse: 'Unauthorized'
-}), knitsRoutes);
+
+app.use('/api/users', userRoutes);
+app.use('/api/knits', knitsRoutes);
 
 // Test route to check server health
 app.get('/', (req, res) => {
@@ -25,13 +22,12 @@ app.get('/', (req, res) => {
 });
 
 // MongoDB connection setup
-mongoose.connect(process.env.MONGO_URI)
+mongoose
+  .connect(process.env.MONGO_URI)
   .then(() => {
-    console.log("MongoDB connected successfully.");
-    app.listen(process.env.PORT || 8000, () => {
-      console.log(`Server is running on port ${process.env.PORT || 8000}`);
-    });
+    console.log("Connected to MongoDB");
+    app.listen(PORT, () =>
+      console.log(`Server running on http://localhost:${PORT}`)
+    );
   })
-  .catch((error) => {
-    console.error("MongoDB connection failed:", error);
-  });
+  .catch((error) => console.error("MongoDB connection error:", error));
