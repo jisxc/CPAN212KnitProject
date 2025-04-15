@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../api/api';  
+import axios from 'axios';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -12,16 +12,22 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
     try {
-      const { data } = await login({ email, password });
-      localStorage.setItem('authToken', data.token);  // Store the JWT in localStorage
-      navigate('/');
+      const response = await axios.post("http://localhost:8000/api/users/login", {
+        email,
+        password,
+      });
+
+      localStorage.setItem("authToken", response.data.token);
+      localStorage.setItem("email", email);
+
+      navigate("/");
     } catch (err) {
       if (!err.response) {
-        setError('Network error. Please try again.');
+        setError("Network error. Please try again.");
       } else {
-        setError(err.response.data?.error || 'Login failed');
+        setError(err.response.data?.error || "Login failed");
       }
     } finally {
       setLoading(false);

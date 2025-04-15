@@ -3,15 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 
 const Navigation = () => {
   const navigate = useNavigate();
-  const username = localStorage.getItem("username"); 
-  const password = localStorage.getItem("password");
-  
-  const isAuthenticated = username && password;
+
+  // Get the user email from localStorage (used for logged-in user identification)
+  const email = localStorage.getItem("email"); 
+
+  const isAuthenticated = email; // If email exists, user is logged in
 
   const handleLogout = () => {
-    localStorage.removeItem("username");
-    localStorage.removeItem("password"); 
-    navigate("/"); 
+    localStorage.removeItem("email"); // Remove email (and password, if needed)
+    localStorage.removeItem("password"); // You can remove password if you're using it
+    navigate("/login"); // Redirect to login page after logging out
   };
 
   return (
@@ -27,7 +28,7 @@ const Navigation = () => {
         <div className="nav-auth">
           {isAuthenticated ? (
             <>
-              <span>Hello, {username}!</span>
+              <span>Hello, {email}!</span> {/* Display "Welcome, [User]" */}
               <button onClick={handleLogout}>Logout</button>
             </>
           ) : (
