@@ -1,7 +1,12 @@
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React from "react";
 
-const ItemDetails = () => {
-    const { id } = useParams();
-    const [ patter]
-}
+const Items = () => {
+  return (
+    <div>
+      <h2>Cart Page</h2>
+      {/* Add your Cart page content here */}
+    </div>
+  );
+};
+
+export default Items; // Make sure this line exists
