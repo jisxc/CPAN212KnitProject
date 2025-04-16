@@ -21,7 +21,6 @@ const Navigation = () => {
         <div className="nav-center">
           <Link to="/">Home</Link>
           <Link to="/discovery">Discovery</Link>
-          <Link to="/items">Items</Link>
           <Link to="/sales">Sales</Link>
           <Link to="/wishlist">Wishlist</Link>
           <Link to="/aboutus">About Us</Link> 
