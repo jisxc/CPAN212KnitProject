@@ -48,12 +48,12 @@ const Homepage = () => {
   };
 
   useEffect(() => {
-    fetchKnits(); // random on load
+    fetchKnits();
   }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    fetchKnits(query); // search when form is submitted
+    fetchKnits(query);
   };
 
   return (

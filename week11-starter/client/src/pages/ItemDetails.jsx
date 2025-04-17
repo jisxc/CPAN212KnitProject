@@ -140,6 +140,26 @@ const ItemDetails = () => {
         {knit.notes || "No description available."}
       </div>
     </div>
+    <div style={{ marginTop: "20px" }}>
+        <button
+          onClick={handleAddToCart}
+          style={{
+            backgroundColor: "#c6328d",
+            color: "#fff",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+            padding: "10px 25px",
+            fontSize: "16px",
+            fontWeight: "bold",
+            transition: "background-color 0.3s ease",
+          }}
+          onMouseEnter={(e) => e.target.style.backgroundColor = "#ff4081"} 
+          onMouseLeave={(e) => e.target.style.backgroundColor = "#c6328d"}
+        >
+          Add to Cart
+        </button>
+      </div>
     </div>
   );
 };
