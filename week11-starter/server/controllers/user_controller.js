@@ -6,10 +6,10 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 const registerUser = async (req, res) => {
   try {
-    const { first_name, last_name, username, password } = req.body;
+    const { first_name, last_name, email, password } = req.body;
 
     // Check if the user already exists
-    const existingUser = await User.findOne({ username });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
     }
@@ -20,7 +20,7 @@ const registerUser = async (req, res) => {
     const newUser = new User({
       first_name,
       last_name,
-      username,
+      email,
       password: hashedPassword,
     });
 
@@ -38,9 +38,9 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   try {
-    const { username, password } = req.body;  
+    const { email, password } = req.body;  
 
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ error: 'User not found' });
     }
@@ -51,7 +51,7 @@ const loginUser = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { userId: user._id, username: user.username }, 
+      { userId: user._id, email: user.email }, 
       JWT_SECRET,  
       { expiresIn: '1h' } 
     );

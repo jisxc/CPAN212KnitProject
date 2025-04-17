@@ -1,11 +1,14 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const ItemDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+
   const [knit, setKnit] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isWishlisted, setIsWishlisted] = useState(false);
 
   useEffect(() => {
     const fetchKnitDetails = async () => {
@@ -30,6 +33,9 @@ const ItemDetails = () => {
 
 
         setKnit(data);
+
+        const storedWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+        setIsWishlisted(storedWishlist.some((item) => item.id === data.id));
       } catch (err) {
         console.error("Error fetching knit details:", err);
         setError("Something went wrong. Try again later.");
@@ -37,10 +43,30 @@ const ItemDetails = () => {
         setLoading(false);
       }
     };
-    console.log(`Fetching details for knit with ID: ${id}`);
 
     fetchKnitDetails();
   }, [id]);
+
+  const handleAddToCart = () => {
+    const currentItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+    const updatedItems = [...currentItems, knit];
+    localStorage.setItem("cartItems", JSON.stringify(updatedItems));
+    navigate("/cart");
+  };
+
+  const toggleWishlist = () => {
+    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+    let updatedWishlist;
+    if (isWishlisted) {
+      updatedWishlist = wishlist.filter((item) => item.id !== knit.id);
+    } else {
+      updatedWishlist = [...wishlist, knit];
+    }
+
+    localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+    setIsWishlisted(!isWishlisted);
+  };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
@@ -52,11 +78,36 @@ const ItemDetails = () => {
 
   return (
     <div style={{ padding: "30px", maxWidth: "600px", margin: "0 auto" }}>
-      <img
-        src={imageUrl}
-        alt={knit.name || "No Image"}
-        style={{ width: "100%", height: "300px", objectFit: "cover", borderRadius: "8px" }}
-      />
+      <div style={{ position: "relative" }}>
+        <img
+          src={imageUrl}
+          alt={knit.name || "No Image"}
+          style={{
+            width: "100%",
+            height: "300px",
+            objectFit: "cover",
+            borderRadius: "8px",
+          }}
+          loading="lazy"
+        />
+        <button
+          onClick={toggleWishlist}
+          title={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
+          style={{
+            position: "absolute",
+            top: "15px",
+            right: "15px",
+            background: "none",
+            border: "none",
+            fontSize: "24px",
+            color: isWishlisted ? "#ff4081" : "#999",
+            cursor: "pointer",
+          }}
+        >
+          {isWishlisted ? "💖" : "🤍"}
+        </button>
+      </div>
+
       <h2 style={{ color: "#c6328d", marginTop: "20px" }}>{knit.name}</h2>
       <p>
         <strong>Price:</strong>{" "}
