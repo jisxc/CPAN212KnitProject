@@ -34,7 +34,7 @@ exports.getAllKnits = async (req, res) => {
         first_photo: pattern.first_photo,
       }));
 
-    console.log("Cleaned Knit Patterns: ", filteredKnits);
+    console.log("Filtered Knit Patterns: ", filteredKnits);
 
     res.json(filteredKnits);
   } catch (err) {
@@ -55,12 +55,14 @@ exports.getKnitById = async (req, res) => {
     });
 
     const pattern = response.data.pattern;
+    pattern.photos = response.data.pattern.photos || [];
+    pattern.first_photo = pattern.photos[0] || null;
     console.log("Full pattern response from Ravelry: ", pattern);
 
     const readyPattern = {
       id: pattern.id,
       name: pattern.name,
-      first_photo: knit.first_photo,
+      first_photo: pattern.first_photo,
       yarn_weight: pattern.yarn_weight,
       notes: pattern.notes,
     };

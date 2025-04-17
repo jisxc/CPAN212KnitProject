@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Wishlist = () => {
   const navigate = useNavigate();
@@ -29,7 +29,9 @@ const Wishlist = () => {
 
   return (
     <div style={{ padding: "30px", maxWidth: "800px", margin: "0 auto" }}>
-      <h2 style={{ color: "#c6328d", textAlign: "center", marginBottom: "20px" }}>
+      <h2
+        style={{ color: "#c6328d", textAlign: "center", marginBottom: "20px" }}
+      >
         Wishlist
       </h2>
 
@@ -49,7 +51,9 @@ const Wishlist = () => {
               }}
             >
               <img
-                src={item.first_photo?.medium_url || "https://placehold.co/100x100"}
+                src={
+                  item.first_photo?.medium_url || "https://placehold.co/100x100"
+                }
                 alt={item.name}
                 style={{
                   width: "100px",
@@ -60,17 +64,41 @@ const Wishlist = () => {
                 }}
               />
               <div style={{ flex: 1 }}>
-                <h4 style={{ margin: 0 }}>{item.name}</h4>
+                <h4 style={{ margin: 0 }}>
+                  <Link 
+                    to={`/knits/${item.id}`}
+                    style={{ textDecoration: "none", color: "#c6328d"}}
+                    >
+                      {item.name}
+                    </Link>
+                </h4>
                 <p>
-                  <strong>Price:</strong> {item?.pattern_sources?.[0]?.price || "Free"}
+                  <strong>Price:</strong>{" "}
+                  {(() => {
+                    const sourceWithPrice = item?.pattern_sources?.find(
+                      (s) => s?.price != null
+                    );
+                    if (sourceWithPrice?.price != null) {
+                      return `$${parseFloat(sourceWithPrice.price).toFixed(2)}`;
+                    }
+
+                    // Fallback: try to extract full price from the notes string (e.g., "$14.00 CAD")
+                    const notes = item?.notes || "";
+                    const priceMatch = notes.match(/\$([\d.]+)\s*CAD/i);
+                    if (priceMatch) {
+                      return `$${priceMatch[1]} CAD`;
+                    }
+
+                    return item?.free ? "Free" : "Paid";
+                  })()}
                 </p>
               </div>
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <button
                   onClick={() => handleAddToCart(item)}
                   style={{
-                    backgroundColor: "#c6328d",  // Pink background
-                    color: "#fff",  // White text
+                    backgroundColor: "#c6328d", // Pink background
+                    color: "#fff", // White text
                     border: "none",
                     borderRadius: "5px",
                     cursor: "pointer",
@@ -79,8 +107,12 @@ const Wishlist = () => {
                     transition: "background-color 0.3s ease",
                     marginBottom: "10px", // Space between the buttons
                   }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = "#ff4081")} // Hover effect
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = "#c6328d")}
+                  onMouseEnter={(e) =>
+                    (e.target.style.backgroundColor = "#ff4081")
+                  } // Hover effect
+                  onMouseLeave={(e) =>
+                    (e.target.style.backgroundColor = "#c6328d")
+                  }
                 >
                   Add to Cart
                 </button>
@@ -88,9 +120,9 @@ const Wishlist = () => {
                 <button
                   onClick={() => handleRemoveFromWishlist(item.id)}
                   style={{
-                    backgroundColor: "transparent",  // Transparent background
-                    color: "#c6328d",  // Pink text color
-                    border: "1px solid #c6328d",  // Pink border
+                    backgroundColor: "transparent", // Transparent background
+                    color: "#c6328d", // Pink text color
+                    border: "1px solid #c6328d", // Pink border
                     borderRadius: "5px",
                     cursor: "pointer",
                     padding: "8px 15px",
@@ -98,12 +130,12 @@ const Wishlist = () => {
                     transition: "background-color 0.3s ease, color 0.3s ease",
                   }}
                   onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = "#c6328d";  // Hover background color
-                    e.target.style.color = "#fff";  // Hover text color (white)
+                    e.target.style.backgroundColor = "#c6328d"; // Hover background color
+                    e.target.style.color = "#fff"; // Hover text color (white)
                   }}
                   onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = "transparent";  // Revert to transparent
-                    e.target.style.color = "#c6328d";  // Revert to pink text color
+                    e.target.style.backgroundColor = "transparent"; // Revert to transparent
+                    e.target.style.color = "#c6328d"; // Revert to pink text color
                   }}
                 >
                   Remove
@@ -114,7 +146,13 @@ const Wishlist = () => {
         </div>
       )}
 
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginTop: "20px",
+        }}
+      >
         <button
           onClick={() => navigate("/discovery")}
           style={{
@@ -127,12 +165,12 @@ const Wishlist = () => {
             transition: "background 0.3s, color 0.3s",
           }}
           onMouseEnter={(e) => {
-            e.target.style.backgroundColor = "#c6328d";  
+            e.target.style.backgroundColor = "#c6328d";
             e.target.style.color = "#fff";
           }}
           onMouseLeave={(e) => {
-            e.target.style.backgroundColor = "transparent";  
-            e.target.style.color = "#c6328d";  
+            e.target.style.backgroundColor = "transparent";
+            e.target.style.color = "#c6328d";
           }}
         >
           Back to Discovery Page

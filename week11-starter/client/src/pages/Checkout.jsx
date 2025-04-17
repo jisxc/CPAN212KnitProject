@@ -81,7 +81,7 @@ const Checkout = () => {
               }}
               onMouseLeave={(e) => {
                 e.target.style.backgroundColor = "transparent";  
-                e.target.style.color = "#c6328d";  /
+                e.target.style.color = "#c6328d"; 
               }}
             >
               Remove

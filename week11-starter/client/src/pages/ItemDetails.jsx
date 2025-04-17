@@ -28,9 +28,10 @@ const ItemDetails = () => {
         }
 
         const data = await response.json();
-        console.log("Fetched Knit Details: ", data);
-        console.log("First Photo objectL: ", data.first_photo);
 
+        console.log("Full Knit Data:", data);
+        console.log("Photos Found: ", data.photos)
+        console.log("First Photo:", data.first_photo);
 
         setKnit(data);
 

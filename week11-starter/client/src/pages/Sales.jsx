@@ -10,35 +10,42 @@ const SalesPage = () => {
     try {
       setLoading(true);
       setError(null);
-
+  
       const username = import.meta.env.VITE_RAVELRY_USERNAME;
       const password = import.meta.env.VITE_RAVELRY_PASSWORD;
       const credentials = btoa(`${username}:${password}`);
-
+  
       const url = `${import.meta.env.VITE_SERVER_URL}api/knits`;
-
+  
       const response = await fetch(url, {
         headers: {
           Authorization: `Basic ${credentials}`,
         },
       });
-
+  
       if (!response.ok) {
         throw new Error("Failed to fetch knitting patterns.");
       }
-
+  
       const data = await response.json();
       console.log("Fetched Knits for Sales:", data);
-
-      // Filter for patterns with discounted prices
+  
+      // Filter for patterns with either:
+      // 1. A true discounted price in pattern_sources
+      // 2. A note that includes tiered pricing with $xx.xx CAD
       const discounted = data.filter((pattern) => {
-        return pattern?.pattern_sources?.some((source) => {
+        const hasDiscountedSource = pattern?.pattern_sources?.some((source) => {
           const price = parseFloat(source?.price);
           const discount = parseFloat(source?.discount_price);
           return !isNaN(price) && !isNaN(discount) && discount < price;
         });
+  
+        const notes = pattern?.notes || "";
+        const hasNotesPrice = /\$[\d.]+\s*CAD/i.test(notes);
+  
+        return hasDiscountedSource || hasNotesPrice;
       });
-
+  
       setSales(discounted);
     } catch (err) {
       console.error("Error fetching sales:", err);
@@ -47,6 +54,7 @@ const SalesPage = () => {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     fetchSales();
