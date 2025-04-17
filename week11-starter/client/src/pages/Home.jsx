@@ -58,7 +58,7 @@ const Homepage = () => {
 
   return (
     <div style={{ padding: "30px", maxWidth: "800px", margin: "0 auto" }}>
-      <h2 style={{ color: "#c6328d", textAlign: "center" }}>Knitting Patterns</h2>
+      <h2 style={{ color: "#c6328d", textAlign: "left" }}>Patterns</h2>
 
       <form onSubmit={handleSearch} style={{ marginBottom: "20px", textAlign: "center" }}>
         <input
@@ -66,7 +66,7 @@ const Homepage = () => {
           placeholder="Search patterns"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          style={{ padding: "10px", width: "70%" }}
+          style={{ padding: "10px", width: "100%" }}
         />
         <button type="submit" style={{ padding: "10px", marginLeft: "10px" }}>
           Search
@@ -81,7 +81,7 @@ const Homepage = () => {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+            gridTemplateColumns: "repeat(3, 1fr)",
             gap: "20px",
           }}
         >
