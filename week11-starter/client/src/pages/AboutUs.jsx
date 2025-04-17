@@ -61,12 +61,6 @@ const AboutUs = () => {
           <p style={{ color: "#6b4a30" }}>Student #: N01611199</p>
         </div>
       </div>
-
-      <div style={{ textAlign: "center" }}>
-        <Link to="/" style={{ color: "#c6328d", fontSize: "18px" }}>
-          Back to Homepage
-        </Link>
-      </div>
     </div>
   );
 };

@@ -27,6 +27,7 @@ const ItemDetails = () => {
         const data = await response.json();
         console.log("Fetched Knit Details: ", data);
         setKnit(data);
+
       } catch (err) {
         console.error("Error fetching knit details:", err);
         setError("Something went wrong. Try again later.");
@@ -47,12 +48,15 @@ const ItemDetails = () => {
   const imageUrl =
     photo?.medium_url || photo?.small_url || photo?.square_url || "https://placehold.co/250x200?text=No+Image";
 
+    console.log("Image URL:", imageUrl);
+
   return (
     <div style={{ padding: "30px", maxWidth: "600px", margin: "0 auto" }}>
       <img
         src={imageUrl}
         alt={knit.name || "No Image"}
         style={{ width: "100%", height: "300px", objectFit: "cover", borderRadius: "8px" }}
+        loading="lazy"
       />
       <h2 style={{ color: "#c6328d", marginTop: "20px" }}>{knit.name}</h2>
       <p>
