@@ -30,18 +30,43 @@ exports.getAllKnits = async (req, res) => {
       .map((pattern) => ({
         id: pattern.id,
         name: pattern.name,
-        price: pattern.price?.usd || 0,
         first_photo: pattern.first_photo,
       }));
 
     console.log("Cleaned Knit Patterns: ", filteredKnits);
 
-
-
-    console.log("Number of filtered Knits: ", filteredKnits.length);
     res.json(filteredKnits);
   } catch (err) {
     console.error("Error fetching from Ravelry api: ", err.message);
     res.status(500).json({ error: err.message });
+  }
+};
+
+exports.getKnitById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const repsonse = await axios.get(`https://api.ravelry.com/patterns/${id}.json`, {
+      auth: {
+        username: process.env.RAVELRY_USERNAME,
+        password: process.env.RAVELRY_PASSWORD
+      }
+    });
+
+    const pattern = response.data.pattern;
+
+    const readyPattern = {
+      id: pattern.id,
+      name: pattern.name,
+      first_photo: pattern.first_photo,
+      yarn_weight: pattern.yarn_weight,
+      notes: pattern.notes,
+    };
+
+    console.log("Fetched pattern id: ", readyPattern);
+    res.json(readyPattern);
+  } catch (err) {
+    console.error("Error fetching this pattern.", err.message);
+    res.status(404).json({ error: "Pattern Not Found."});
   }
 };

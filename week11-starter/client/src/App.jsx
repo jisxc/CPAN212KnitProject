@@ -4,7 +4,7 @@ import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Discovery from "./pages/Discovery";
-import Items from "./pages/Items";
+import ItemDetails from "./pages/ItemDetails";
 import Sales from "./pages/Sales";
 import Wishlist from "./pages/Wishlist";
 import AboutUs from "./pages/AboutUs";
@@ -30,7 +30,7 @@ const App = () => {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/details/:id" element={<Items />} /> 
+          <Route path="/knits/:id" element={<ItemDetails />} /> 
           <Route path="*" element={<div><h2>404 - Page Not Found</h2></div>} />
         </Routes>
       </main>

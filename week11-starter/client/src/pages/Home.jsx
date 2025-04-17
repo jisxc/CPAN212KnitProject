@@ -16,9 +16,7 @@ const Homepage = () => {
       const password = import.meta.env.VITE_RAVELRY_PASSWORD;
       const credentials = btoa(`${username}:${password}`);
 
-      const url = `${import.meta.env.VITE_SERVER_URL}api/knits${
-        searchQuery ? `?query=${searchQuery}` : ""
-      }`;
+      const url = `${import.meta.env.VITE_SERVER_URL}api/knits${searchQuery ? `?query=${searchQuery}` : ""}`;
 
       const response = await fetch(url, {
         headers: {
@@ -31,7 +29,6 @@ const Homepage = () => {
       }
 
       const data = await response.json();
-
       console.log("Fetched Knits Data: ", data);
 
       const filteredKnits = data.filter((pattern) => {
@@ -89,10 +86,7 @@ const Homepage = () => {
           {knits.map((knit, index) => {
             const photo = knit?.first_photo;
             const imageUrl =
-              photo?.medium_url ||
-              photo?.small_url ||
-              photo?.square_url ||
-              "https://placehold.co/250x200?text=No+Image";
+              photo?.medium_url || photo?.small_url || photo?.square_url || "https://placehold.co/250x200?text=No+Image";
 
             return (
               <div
@@ -119,9 +113,19 @@ const Homepage = () => {
                 <h3 style={{ color: "#6b4a30" }}>{knit.name}</h3>
                 <p>
                   <strong>Price:</strong>{" "}
-                  {knit.price ? `$${knit.price.toFixed(2)}` : "Free"}
+                  {(() => {
+                    const sourceWithPrice = knit?.pattern_sources?.find((s) => s?.price != null);
+                    if (sourceWithPrice?.price != null) {
+                      return `$${parseFloat(sourceWithPrice.price).toFixed(2)}`;
+                    }
+                    return knit?.free ? "Free" : "Paid";
+                  })()}
                 </p>
-                <Link to={`/knits/${knit.id || index}`}>View Details</Link>
+                {knit.id ? (
+                  <Link to={`/knits/${knit.id}`}>View Details</Link>
+                ) : (
+                  <p>Details Unavailable</p>
+                )}
               </div>
             );
           })}
