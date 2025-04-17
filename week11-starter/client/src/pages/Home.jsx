@@ -39,8 +39,7 @@ const Homepage = () => {
         return pattern?.name && photo;
       });
 
-      setKnits(filteredKnits); 
-
+      setKnits(filteredKnits);
     } catch (err) {
       console.error("Error fetching knits:", err);
       setError("Something went wrong. Try again later.");
@@ -90,7 +89,10 @@ const Homepage = () => {
           {knits.map((knit, index) => {
             const photo = knit?.first_photo;
             const imageUrl =
-              photo?.medium_url || photo?.small_url || photo?.square_url || "https://placehold.co/250x200?text=No+Image";
+              photo?.medium_url ||
+              photo?.small_url ||
+              photo?.square_url ||
+              "https://placehold.co/250x200?text=No+Image";
 
             return (
               <div
@@ -105,10 +107,7 @@ const Homepage = () => {
                 }}
               >
                 <img
-                  src={
-                    imageUrl ||
-                    "https://placehold.co/250x200?text=No+Image"
-                  }
+                  src={imageUrl}
                   alt={knit.name}
                   style={{
                     width: "100%",
@@ -120,13 +119,7 @@ const Homepage = () => {
                 <h3 style={{ color: "#6b4a30" }}>{knit.name}</h3>
                 <p>
                   <strong>Price:</strong>{" "}
-                  {(() => {
-                    const sourceWithPrice = knit?.pattern_sources?.find((s) => s?.price != null);
-                    if (sourceWithPrice?.price != null) {
-                      return `$${parseFloat(sourceWithPrice.price).toFixed(2)}`;
-                    }
-                    return knit?.free ? "Free" : "Paid";
-                  })()}
+                  {knit.price ? `$${knit.price.toFixed(2)}` : "Free"}
                 </p>
                 <Link to={`/knits/${knit.id || index}`}>View Details</Link>
               </div>
