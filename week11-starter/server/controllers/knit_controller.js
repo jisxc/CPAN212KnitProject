@@ -3,6 +3,7 @@ const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 
 const axios = require('axios');
+const knit = require('../models/knit');
 
 exports.getAllKnits = async (req, res) => {
   const { query } = req.query;
@@ -54,11 +55,12 @@ exports.getKnitById = async (req, res) => {
     });
 
     const pattern = response.data.pattern;
+    console.log("Full pattern response from Ravelry: ", pattern);
 
     const readyPattern = {
       id: pattern.id,
       name: pattern.name,
-      first_photo: pattern.first_photo,
+      first_photo: knit.first_photo,
       yarn_weight: pattern.yarn_weight,
       notes: pattern.notes,
     };

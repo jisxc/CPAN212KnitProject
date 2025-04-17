@@ -26,6 +26,9 @@ const ItemDetails = () => {
 
         const data = await response.json();
         console.log("Fetched Knit Details: ", data);
+        console.log("First Photo objectL: ", data.first_photo);
+
+
         setKnit(data);
       } catch (err) {
         console.error("Error fetching knit details:", err);
@@ -45,7 +48,7 @@ const ItemDetails = () => {
 
   const photo = knit?.first_photo;
   const imageUrl =
-    photo?.medium_url || photo?.small_url || photo?.square_url || "https://placehold.co/250x200?text=No+Image";
+    (photo?.medium_url || photo?.small_url || photo?.square_url) || "https://placehold.co/250x200?text=No+Image";
 
   return (
     <div style={{ padding: "30px", maxWidth: "600px", margin: "0 auto" }}>
@@ -66,20 +69,25 @@ const ItemDetails = () => {
         })()}
       </p>
       <p>
-        <strong>Craft:</strong> {knit.craft}
-      </p>
-      <p>
-        <strong>Published:</strong> {knit.published}
-      </p>
-      <p>
         <strong>Yarn Weight:</strong> {knit.yarn_weight?.name}
       </p>
-      <p>
-        <strong>Pattern Type:</strong> {knit.pattern_type}
-      </p>
-      <p>
-        <strong>Description:</strong> {knit.description || "No description available."}
-      </p>
+      <div style={{ marginTop: "10px" }}>
+      <strong>Description:</strong>
+      <div
+        style={{
+          marginTop: "5px",
+          maxHeight: "150px",
+          overflowY: "auto",
+          padding: "10px",
+          backgroundColor: "#f9f9f9",
+          borderRadius: "5px",
+          border: "1px solid #ccc",
+          whiteSpace: "pre-wrap",
+        }}
+      >
+        {knit.notes || "No description available."}
+      </div>
+    </div>
     </div>
   );
 };
