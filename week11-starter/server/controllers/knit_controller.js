@@ -46,7 +46,7 @@ exports.getKnitById = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const repsonse = await axios.get(`https://api.ravelry.com/patterns/${id}.json`, {
+    const response = await axios.get(`https://api.ravelry.com/patterns/${id}.json`, {
       auth: {
         username: process.env.RAVELRY_USERNAME,
         password: process.env.RAVELRY_PASSWORD

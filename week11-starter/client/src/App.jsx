@@ -5,7 +5,7 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Discovery from "./pages/Discovery";
 import ItemDetails from "./pages/ItemDetails";
-import Sales from "./pages/Sales";
+import SalesPage from "./pages/Sales";
 import Wishlist from "./pages/Wishlist";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
@@ -22,7 +22,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/discovery" element={<Discovery />} />
-          <Route path="/sales" element={<Sales />} />
+          <Route path="/sales" element={<SalesPage />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/aboutus" element={<AboutUs />} />
           <Route path="/contactus" element={<ContactUs />} />

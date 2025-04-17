@@ -29,12 +29,14 @@ const Homepage = () => {
       }
 
       const data = await response.json();
-      console.log("Fetched Knits Data: ", data);
+      console.log("Raw API data: ", data);
 
       const filteredKnits = data.filter((pattern) => {
-        const photo = pattern?.first_photo;
-        return pattern?.name && photo;
+          const photo = pattern?.first_photo;
+          return pattern?.name && photo;
       });
+
+      console.log("Final Knit List: ", filteredKnits);
 
       setKnits(filteredKnits);
     } catch (err) {

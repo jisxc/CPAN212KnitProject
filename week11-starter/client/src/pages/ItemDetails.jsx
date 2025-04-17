@@ -51,7 +51,7 @@ const ItemDetails = () => {
     <div style={{ padding: "30px", maxWidth: "600px", margin: "0 auto" }}>
       <img
         src={imageUrl}
-        alt={knit.name}
+        alt={knit.name || "No Image"}
         style={{ width: "100%", height: "300px", objectFit: "cover", borderRadius: "8px" }}
       />
       <h2 style={{ color: "#c6328d", marginTop: "20px" }}>{knit.name}</h2>
@@ -72,7 +72,7 @@ const ItemDetails = () => {
         <strong>Published:</strong> {knit.published}
       </p>
       <p>
-        <strong>Yarn Weight:</strong> {knit.yarn_weight}
+        <strong>Yarn Weight:</strong> {knit.yarn_weight?.name}
       </p>
       <p>
         <strong>Pattern Type:</strong> {knit.pattern_type}
