@@ -11,7 +11,7 @@ const Cart = () => {
   }, []);
 
   const handleRemove = (id) => {
-    const updatedCart = cartItems.filter(item => item.id !== id);
+    const updatedCart = cartItems.filter((item) => item.id !== id);
     setCartItems(updatedCart);
     localStorage.setItem("cartItems", JSON.stringify(updatedCart));
   };
@@ -61,14 +61,6 @@ const Cart = () => {
               cursor: "pointer",
               transition: "background 0.3s, color 0.3s",
             }}
-            onMouseEnter={(e) => {
-              e.target.style.backgroundColor = "#c6328d";  
-              e.target.style.color = "#fff";  
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.backgroundColor = "transparent";  
-              e.target.style.color = "#c6328d"; 
-            }}
           >
             Remove
           </button>
@@ -85,15 +77,6 @@ const Cart = () => {
             border: "1px solid #c6328d",
             borderRadius: "5px",
             cursor: "pointer",
-            transition: "background 0.3s, color 0.3s",
-          }}
-          onMouseEnter={(e) => {
-            e.target.style.backgroundColor = "#c6328d";  
-            e.target.style.color = "#fff";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.backgroundColor = "transparent";  
-            e.target.style.color = "#c6328d";  
           }}
         >
           Back to Discovery Page

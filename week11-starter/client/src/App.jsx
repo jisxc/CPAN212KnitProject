@@ -13,6 +13,8 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Profile from "./pages/Profile";
+
 
 const App = () => {
   return (
@@ -31,6 +33,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/knits/:id" element={<ItemDetails />} /> 
+          <Route path="/profile" element={<Profile />} /> 
           <Route path="*" element={<div><h2>404 - Page Not Found</h2></div>} />
         </Routes>
       </main>

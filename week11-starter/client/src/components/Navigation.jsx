@@ -30,7 +30,9 @@ const Navigation = () => {
         <div className="nav-auth">
           {isAuthenticated ? (
             <>
-              <span>Hello, {username}!</span> 
+              <Link to="/profile" style={{ marginRight: "10px", fontWeight: "bold", color: "#c6328d" }}>
+                Hello, {username}!
+              </Link>
               <Link to="/cart">Cart</Link> 
               <Link to="/checkout">Checkout</Link>
               <button onClick={handleLogout}>Logout</button>

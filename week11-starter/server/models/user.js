@@ -28,9 +28,13 @@ const userSchema = new mongoose.Schema(
       required: [true, "Last name is required"],
       trim: true,
     },
+    orders: {
+      type: Array,
+      default: [],
+    },
   },
   {
-    timestamps: true, // Adds createdAt and updatedAt fields
+    timestamps: true, // Automatically includes createdAt and updatedAt
   }
 );
 

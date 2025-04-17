@@ -5,7 +5,6 @@ const Wishlist = () => {
   const navigate = useNavigate();
   const [wishlist, setWishlist] = useState([]);
 
-  // Fetch the wishlist from localStorage when the component mounts
   useEffect(() => {
     const storedWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
     setWishlist(storedWishlist);
