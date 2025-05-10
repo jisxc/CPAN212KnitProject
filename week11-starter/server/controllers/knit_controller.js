@@ -2,55 +2,75 @@ const Knit = require('../models/knit');
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 
-// GET all knits
+const axios = require('axios');
+const knit = require('../models/knit');
+
 exports.getAllKnits = async (req, res) => {
+  const { query } = req.query;
+
   try {
-    const knits = await Knit.find().populate('created_by', 'first_name email');
-    res.json(knits);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    const response = await axios.get('https://api.ravelry.com/patterns/search.json', {
+      auth: {
+        username: process.env.RAVELRY_USERNAME,
+        password: process.env.RAVELRY_PASSWORD
+      },
+      params: query
+        ? {
+          query: query,
+          page_size: 9
+        }
+        : {
+          sort: 'best',
+          page: Math.floor(Math.random() * 100) + 1,
+          page_size: 9
+        }
+    });
+
+    const filteredKnits = response.data.patterns
+      .filter((pattern) => pattern.name && pattern.first_photo)
+      .map((pattern) => ({
+        id: pattern.id,
+        name: pattern.name,
+        first_photo: pattern.first_photo,
+      }));
+
+    console.log("Filtered Knit Patterns: ", filteredKnits);
+
+    res.json(filteredKnits);
+  } catch (err) {
+    console.error("Error fetching from Ravelry api: ", err.message);
+    res.status(500).json({ error: err.message });
   }
 };
 
-// POST create a knit
-exports.createKnit = async (req, res) => {
+exports.getKnitById = async (req, res) => {
+  const { id } = req.params;
+
   try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return res.status(401).json({ error: 'Authorization header missing' });
-    }
-
-    const base64Credentials = authHeader.split(' ')[1];
-    const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
-    const [email, password] = credentials.split(':');
-
-    if (!email || !password) {
-      return res.status(400).json({ error: 'Missing credentials' });
-    }
-
-    const user = await User.findOne({ email });
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-
-    const { patternName, designer, yarns, techniques, price, difficulty } = req.body;
-
-    if (!patternName || !designer || !yarns || !techniques || !price || !difficulty) {
-      return res.status(400).json({ error: 'Missing required fields' });
-    }
-
-    const knit = await Knit.create({
-      patternName,
-      designer,
-      yarns: yarns.split(',').map(y => y.trim()),
-      techniques: techniques.split(',').map(t => t.trim()),
-      price,
-      difficulty,
-      created_by: user._id
+    const response = await axios.get(`https://api.ravelry.com/patterns/${id}.json`, {
+      auth: {
+        username: process.env.RAVELRY_USERNAME,
+        password: process.env.RAVELRY_PASSWORD
+      }
     });
 
-    res.status(201).json(knit);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
+    const pattern = response.data.pattern;
+    pattern.photos = response.data.pattern.photos || [];
+    pattern.first_photo = pattern.photos[0] || null;
+    console.log("Full pattern response from Ravelry: ", pattern);
+
+    const readyPattern = {
+      id: pattern.id,
+      name: pattern.name,
+      first_photo: pattern.first_photo,
+      yarn_weight: pattern.yarn_weight,
+      notes: pattern.notes,
+    };
+
+    console.log("Fetched pattern id: ", readyPattern);
+    res.json(readyPattern);
+  } catch (err) {
+    console.error("Error fetching this pattern.", err.message);
+    res.status(404).json({ error: "Pattern Not Found."});
   }
 };

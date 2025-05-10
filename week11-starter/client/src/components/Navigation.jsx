@@ -3,15 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 
 const Navigation = () => {
   const navigate = useNavigate();
-  const username = localStorage.getItem("username"); 
-  const password = localStorage.getItem("password");
-  
-  const isAuthenticated = username && password;
+
+  const email = localStorage.getItem("email");
+  const isAuthenticated = email;
+  const username = email ? email.split('@')[0] : '';
 
   const handleLogout = () => {
-    localStorage.removeItem("username");
-    localStorage.removeItem("password"); 
-    navigate("/"); 
+    localStorage.removeItem("email");
+    localStorage.removeItem("password");
+    navigate("/login");
   };
 
   return (
@@ -20,14 +20,21 @@ const Navigation = () => {
       <nav className="nav-container">
         <div className="nav-center">
           <Link to="/">Home</Link>
-          <Link to="/knits">All Knits</Link>
-          <Link to="/knits/add">Add Knit</Link>
+          <Link to="/discovery">Discovery</Link>
+          <Link to="/sales">Sales</Link>
+          <Link to="/wishlist">Wishlist</Link>
+          <Link to="/aboutus">About Us</Link> 
+          <Link to="/contactus">Contact Us</Link> 
         </div>
 
         <div className="nav-auth">
           {isAuthenticated ? (
             <>
-              <span>Hello, {username}!</span>
+              <Link to="/profile" style={{ marginRight: "10px", fontWeight: "bold", color: "#c6328d" }}>
+                Hello, {username}!
+              </Link>
+              <Link to="/cart">Cart</Link> 
+              <Link to="/checkout">Checkout</Link>
               <button onClick={handleLogout}>Logout</button>
             </>
           ) : (

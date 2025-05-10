@@ -1,35 +1,33 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const cors = require('cors');
 require('dotenv').config();
-const basicAuth = require('express-basic-auth');
+
 const app = express();
+const PORT = process.env.PORT || 8000;
 
-// Set up middleware
-app.use(express.json()); // Middleware to parse JSON bodies
+const userRoutes = require('./routes/user_router');
+const knitsRoutes = require('./routes/knit_router');
+const orderRoutes = require('./routes/order_router');
 
-// Basic Auth setup
-app.use(basicAuth({
-  users: { 
-    [process.env.VITE_RAVELRY_USERNAME]: process.env.VITE_RAVELRY_PASSWORD // Use environment variables for security
-  },
-  challenge: true,
-  unauthorizedResponse: 'Unauthorized'
-}));
+app.use(cors());
+app.use(express.json());
 
-// Test route to check server health
+app.use('/api/users', userRoutes);
+app.use('/api/knits', knitsRoutes);
+app.use('/api/orders', orderRoutes);
+
 app.get('/', (req, res) => {
   console.log("Received request at /");
   res.send('Server is up and running!');
 });
 
-// MongoDB connection setup
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose
+  .connect(process.env.MONGO_URI)
   .then(() => {
-    console.log("MongoDB connected successfully.");
-    app.listen(process.env.PORT || 8000, () => {
-      console.log(`Server is running on port ${process.env.PORT || 8000}`);
-    });
+    console.log("Connected to MongoDB");
+    app.listen(PORT, () =>
+      console.log(`Server running on http://localhost:${PORT}`)
+    );
   })
-  .catch((error) => {
-    console.error("MongoDB connection failed:", error);
-  });
+  .catch((error) => console.error("MongoDB connection error:", error));
